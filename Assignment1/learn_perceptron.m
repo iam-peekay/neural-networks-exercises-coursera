@@ -110,7 +110,7 @@ for i=1:num_neg_examples
     this_case = neg_examples(i,:);
     x = this_case'; %Hint
     activation = this_case*w;
-    % Incorrect positive classification
+    % Incorrect positive classification - add the input vector to the weight vector
     if (activation >= 0)
         w = w - x;
     end
@@ -119,7 +119,7 @@ for i=1:num_pos_examples
     this_case = pos_examples(i,:);
     x = this_case';
     activation = this_case*w;
-    % Incorrect negative classification
+    % Incorrect negative classification - subtract the input vector to the weight vector
     if (activation < 0)
         w = w + x;
     end
