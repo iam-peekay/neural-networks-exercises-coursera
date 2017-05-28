@@ -1,0 +1,11 @@
+# Logs
+logs
+*.log
+*.rdb
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+.DS_Store
