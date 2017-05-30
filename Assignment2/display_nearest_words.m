@@ -14,6 +14,8 @@ if ~any(id)
   fprintf(1, 'Word ''%s\'' not in vocabulary.\n', word);
   return;
 end
+
+fprintf('id: %f', id);
 % Compute distance to every other word.
 vocab_size = size(vocab, 2);
 word_rep = word_embedding_weights(id, :);

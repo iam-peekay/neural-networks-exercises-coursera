@@ -31,7 +31,11 @@ input = [id1; id2; id3];
 [embedding_layer_state, hidden_layer_state, output_layer_state] = ...
   fprop(input, model.word_embedding_weights, model.embed_to_hid_weights,...
         model.hid_to_output_weights, model.hid_bias, model.output_bias);
+
+% Order the probabilities (along w/ index from vocab) of words from higest to lowest 
 [prob, indices] = sort(output_layer_state, 'descend');
+
+
 for i = 1:k
   fprintf(1, '%s %s %s %s Prob: %.5f\n', word1, word2, word3, vocab{indices(i)}, prob(i));
 end

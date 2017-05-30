@@ -16,12 +16,13 @@ end
 
 % SET HYPERPARAMETERS HERE.
 batchsize = 100;  % Mini-batch size.
-learning_rate = 0.1;  % Learning rate; default = 0.1.
-momentum = 0.9;  % Momentum; default = 0.9.
+learning_rate =  .1;  % Learning rate; default = 0.1.
+momentum = 0.0;  % Momentum; default = 0.9.
 numhid1 = 50;  % Dimensionality of embedding space; default = 50.
 numhid2 = 200;  % Number of units in hidden layer; default = 200.
 init_wt = 0.01;  % Standard deviation of the normal distribution
                  % which is sampled to get the initial weights; default = 0.01
+
 
 % VARIABLES FOR TRACKING TRAINING PROGRESS.
 show_training_CE_after = 100;
@@ -92,20 +93,28 @@ for epoch = 1:epochs
 
     % BACK PROPAGATE.
     %% OUTPUT LAYER.
+    % hidden_layer_state is numhid2 X batchsize. error_deriv is vocab_size x batchsize.
+    % hid_to_output_weights_gradient is numhid2 x vocab_size matrix.
     hid_to_output_weights_gradient =  hidden_layer_state * error_deriv';
     output_bias_gradient = sum(error_deriv, 2);
+    % hid_to_output_weights is numhid2 x vocab_size. error_deriv is vocab_size x batchsize.
+    % back_propagated_deriv_1 is numhid2 x batchsize matrix.
     back_propagated_deriv_1 = (hid_to_output_weights * error_deriv) ...
       .* hidden_layer_state .* (1 - hidden_layer_state);
 
     %% HIDDEN LAYER.
     % FILL IN CODE. Replace the line below by one of the options.
+    %  embed_to_hid_weights_gradient = zeros(numhid1 * numwords, numhid2);
     % Options:
     % (a) embed_to_hid_weights_gradient = back_propagated_deriv_1' * embedding_layer_state;
+    % embedding_layer_state is numhid1*numwords X batchsize. back_propagated_deriv_1 is numhid2 x batchsize.
+    % embed_to_hid_weights_gradient is numhid1*numwords x numhid2.
     embed_to_hid_weights_gradient = embedding_layer_state * back_propagated_deriv_1';
     % (c) embed_to_hid_weights_gradient = back_propagated_deriv_1;
     % (d) embed_to_hid_weights_gradient = embedding_layer_state;
 
     % FILL IN CODE. Replace the line below by one of the options.
+    % hid_bias_gradient = zeros(numhid2, 1);
     % Options
     hid_bias_gradient = sum(back_propagated_deriv_1, 2);
     % (b) hid_bias_gradient = sum(back_propagated_deriv_1, 1);
@@ -113,7 +122,10 @@ for epoch = 1:epochs
     % (d) hid_bias_gradient = back_propagated_deriv_1';
 
     % FILL IN CODE. Replace the line below by one of the options.
+    % back_propagated_deriv_2 = zeros(numhid2, batchsize);
     % Options
+    % embed_to_hid_weights is numwords*numhid1 x numhid2. back_propagated_deriv_1 is numhid2 x batchsize.
+    % back_propagated_deriv_2 is numwords*numhid1 x batchsize
     back_propagated_deriv_2 = embed_to_hid_weights * back_propagated_deriv_1;
     % (b) back_propagated_deriv_2 = back_propagated_deriv_1 * embed_to_hid_weights;
     % (c) back_propagated_deriv_2 = back_propagated_deriv_1' * embed_to_hid_weights;

@@ -44,24 +44,33 @@ embedding_layer_state = reshape(...
   word_embedding_weights(reshape(input_batch, 1, []),:)',...
   numhid1 * numwords, []);
 
+% fprintf('\n size of embedding layer state', size(embedding_layer_state));
+
 %% COMPUTE STATE OF HIDDEN LAYER.
 % Compute inputs to hidden units.
+% embed_to_hid_weights is numhid1*numwords X numhid2 matrix. embedding_layer_state is numhid1*numwords x batchsize
+% Result is numhid2 x batchsize matrix
 inputs_to_hidden_units = embed_to_hid_weights' * embedding_layer_state + ...
   repmat(hid_bias, 1, batchsize);
 
+% fprintf('\n size of inputs_to_hidden_units', size(inputs_to_hidden_units));
 % Apply logistic activation function.
 % FILL IN CODE. Replace the line below by one of the options.
+% hidden_layer_state = zeros(numhid2, batchsize);
 % Options
 % (a) hidden_layer_state = 1 ./ (1 + exp(inputs_to_hidden_units));
 % (b) hidden_layer_state = 1 ./ (1 - exp(-inputs_to_hidden_units));
-hidden_layer_state = 1 ./ (1 + exp(-inputs_to_hidden_units));
+hidden_layer_state = 1 ./ (1 + exp(-inputs_to_hidden_units)); % numhid2 x batchsize matrix
 % (d) hidden_layer_state = -1 ./ (1 + exp(-inputs_to_hidden_units));
 
 %% COMPUTE STATE OF OUTPUT LAYER.
 % Compute inputs to softmax.
 % FILL IN CODE. Replace the line below by one of the options.
+% inputs_to_softmax = zeros(vocab_size, batchsize);
 % Options
-inputs_to_softmax = hid_to_output_weights' * hidden_layer_state +  repmat(output_bias, 1, batchsize);
+% hid_to_output_weights is numhid2 X vocab_size & hidden_layer_state is numhid2 x batchsize matrix. 
+% So inputs_to_softmax is vocab_size x batchsize matrix
+inputs_to_softmax = hid_to_output_weights' * hidden_layer_state +  repmat(output_bias, 1, batchsize); 
 % (b) inputs_to_softmax = hid_to_output_weights' * hidden_layer_state +  repmat(output_bias, batchsize, 1);
 % (c) inputs_to_softmax = hidden_layer_state * hid_to_output_weights' +  repmat(output_bias, 1, batchsize);
 % (d) inputs_to_softmax = hid_to_output_weights * hidden_layer_state +  repmat(output_bias, batchsize, 1);
