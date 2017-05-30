@@ -13,7 +13,7 @@ function [embedding_layer_state, hidden_layer_state, output_layer_state] = ...
 %     numhid1 is the dimensionality of the embedding space.
 %
 %   embed_to_hid_weights: Weights between the word embedding layer and hidden
-%     layer as a matrix of soze numhid1*numwords X numhid2, numhid2 is the
+%     layer as a matrix of size numhid1*numwords X numhid2, numhid2 is the
 %     number of hidden units.
 %
 %   hid_to_output_weights: Weights between the hidden layer and output softmax
@@ -51,19 +51,17 @@ inputs_to_hidden_units = embed_to_hid_weights' * embedding_layer_state + ...
 
 % Apply logistic activation function.
 % FILL IN CODE. Replace the line below by one of the options.
-hidden_layer_state = zeros(numhid2, batchsize);
 % Options
 % (a) hidden_layer_state = 1 ./ (1 + exp(inputs_to_hidden_units));
 % (b) hidden_layer_state = 1 ./ (1 - exp(-inputs_to_hidden_units));
-% (c) hidden_layer_state = 1 ./ (1 + exp(-inputs_to_hidden_units));
+hidden_layer_state = 1 ./ (1 + exp(-inputs_to_hidden_units));
 % (d) hidden_layer_state = -1 ./ (1 + exp(-inputs_to_hidden_units));
 
 %% COMPUTE STATE OF OUTPUT LAYER.
 % Compute inputs to softmax.
 % FILL IN CODE. Replace the line below by one of the options.
-inputs_to_softmax = zeros(vocab_size, batchsize);
 % Options
-% (a) inputs_to_softmax = hid_to_output_weights' * hidden_layer_state +  repmat(output_bias, 1, batchsize);
+inputs_to_softmax = hid_to_output_weights' * hidden_layer_state +  repmat(output_bias, 1, batchsize);
 % (b) inputs_to_softmax = hid_to_output_weights' * hidden_layer_state +  repmat(output_bias, batchsize, 1);
 % (c) inputs_to_softmax = hidden_layer_state * hid_to_output_weights' +  repmat(output_bias, 1, batchsize);
 % (d) inputs_to_softmax = hid_to_output_weights * hidden_layer_state +  repmat(output_bias, batchsize, 1);
